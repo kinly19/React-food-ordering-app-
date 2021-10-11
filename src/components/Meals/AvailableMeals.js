@@ -1,4 +1,5 @@
 import classes from './AvailableMeals.module.css';
+import MealItem from './MealItem/MealItem';
 
 const DUMMY_MEALS = [
   {
@@ -29,7 +30,16 @@ const DUMMY_MEALS = [
 
 const AvailableMeals = () => {
 
-  const mealsList = DUMMY_MEALS.map(meal => <li>{meal.name}</li>) //return an li of each meal name inside of DUMMY_MEALS data
+  const mealsList = DUMMY_MEALS.map((meal) => ( //const helper to map through our dummy list, we can do it here instead of inside the actually jsx snippet
+    <li>
+      <MealItem //return a custom component for each item in our Dummy_meals list.
+        key={meal.id}
+        name={meal.name}
+        description={meal.description}
+        price={meal.price}
+      />
+    </li>
+  )); 
 
   return (
     <section className={classes.meals}>
