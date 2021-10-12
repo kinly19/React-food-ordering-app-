@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import classes from './Modal.module.css';
 
 //backdrop compoent for layout
-const BackDrop = () => {
-  return <div className={classes.backdrop}></div>;
+const BackDrop = (props) => {
+  return <div className={classes.backdrop} onClick={props.onClose}></div>;
 };
 
 //overlay component, this is where we will use props.chidren to pass content inbetween the tags
@@ -28,7 +28,7 @@ const portalElement = document.getElementById('overlays');
 const Modal = (props) => {
   return (
     <Fragment>
-      {ReactDOM.createPortal(<BackDrop />, portalElement)}
+      {ReactDOM.createPortal(<BackDrop onClose={props.onClick}/>, portalElement)}
       {ReactDOM.createPortal(
         <ModalOverlay>{props.children}</ModalOverlay>,
         portalElement

@@ -13,14 +13,14 @@ const Cart = (props) => {
   );
 
   return (
-    <Modal>{/* Overlay component used as a wrapper */}
+    <Modal onClick={props.onHideCart}>{/* Overlay component used as a wrapper */}
       {cartItems}
       <div className={classes.total}>
         <span>Total Amount</span>
         <span>35.62</span>
       </div>
       <div className={classes.actions}>
-        <button className={classes['button--alt']}>Close</button>
+        <button className={classes['button--alt']} onClick={props.onHideCart}>Close</button>
         <button className={classes.button}>Order</button>
       </div>
     </Modal>
