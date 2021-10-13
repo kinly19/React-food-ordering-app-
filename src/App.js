@@ -1,7 +1,8 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import Header from "./components/Layout/Header";
 import Meals from "./components/Meals/Meals";
 import Cart from "./components/Cart/Cart";
+import CartProvider from "./store/CartProvider";
 
 function App() {
 
@@ -16,13 +17,13 @@ function App() {
   }
 
   return (
-    <Fragment>
+    <CartProvider> {/* provide... CartProvider around components that will use its data */}
       {isCartOpen && <Cart onHideCart={hideCartHandler}/>}
       <Header onShowCart={showCartHandler}/>
       <main> {/* html 5 tag */}
         <Meals />
       </main>
-    </Fragment>
+    </CartProvider>
   );
 };
 
