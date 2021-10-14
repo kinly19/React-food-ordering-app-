@@ -1,9 +1,22 @@
+import { useContext } from 'react'; //using context
 import classes from './MealItem.module.css';
 import MealItemForm from './MealItemForm';
 
-const MealItem = (props) => {
+import CartContext from '../../../store/cart-context'; //using the context we want to access
 
+const MealItem = (props) => {
+  
+  const cartCtx = useContext(CartContext); //point to the context we want to use
   const price =  `£${props.price.toFixed(2)}`; //render two deci places
+
+  const addToCartHandler = amount => {
+    cartCtx.addItem({ //addItem is a method defined in our context
+      id: props.id,
+      name: props.name,
+      amount: amount,
+      price: props.price
+    });
+  }
 
   return (
     <li className={classes.meal}>
@@ -13,7 +26,7 @@ const MealItem = (props) => {
         <div className={classes.price}>{price}</div>
       </div>
       <div>
-        <MealItemForm />
+        <MealItemForm onAddToCart={addToCartHandler}/>
       </div>
     </li>
   );
