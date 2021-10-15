@@ -14,12 +14,32 @@ const defaultCartState = {
 //reducer function state --> defaultCartState is the last state snapshot managed by the reducer function. action is dispatched by us. 
 const cartReducer = (state, action) => { //'state'--> cartState --> useReducer --> defaultCartState
   if(action.type === 'ADD') {
-    const updatedItems = state.items.concat(action.item); //whatever the state was plus action.items
+    //check if item already exists
+    //findIndex built in js method which finds an index of an item inside of an array
+    //if the items id we are looking at is the same as the dispatched action id
+    const existingCartItemIndex = state.items.findIndex(
+      (item) => item.id === action.item.id //return index of that item if it exists
+    ); 
+
+    const existingCartItem = state.items[existingCartItemIndex]; //if the item does exist, existingCartItem will be set to that
+    let updatedItems;
+
+    if(existingCartItem){ //if the item exist
+      const updatedItem = {
+        ...existingCartItem, //we spread the existing item
+        amount: existingCartItem.amount + action.item.amount //we update and add the amount
+      };
+      updatedItems = [...state.items]; //updatedItems --> ...existingCartItem + ...state.item 
+      updatedItems[existingCartItemIndex] = updatedItem; //
+    }else {
+      updatedItems = state.items.concat(action.item); //whatever the state was plus action.items
+    };
+
     const updatedTotalAmount = state.totalAmount + action.item.price * action.item.amount; //eg action.item.price(5)* action.item.amount(2) + state.totalAmount (5) = 15
      //return a new state snapshot
     return {
       items: updatedItems,
-      totalAmount: updatedTotalAmount
+      totalAmount: updatedTotalAmount,
     };
   }
   //return default if above does not meet
