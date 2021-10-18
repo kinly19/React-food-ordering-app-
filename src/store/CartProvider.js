@@ -42,8 +42,30 @@ const cartReducer = (state, action) => { //'state'--> cartState --> useReducer -
       totalAmount: updatedTotalAmount,
     };
   }
+
+  if (action.type === "REMOVE") {
+    const existingCartItemIndex = state.items.findIndex( //find the exisiting item with findIndex
+      (item) => item.id === action.id
+    );
+    const existingItem = state.items[existingCartItemIndex]; //points to that item in the array
+    const updatedTotalAmount = state.totalAmount - existingItem.price; 
+    let updatedItems;
+
+    if (existingItem.amount === 1) {
+      // filter method() creates a new array, where the item.id which is equal state.id is not apart of anymore.
+      updatedItems = state.items.filter((item) => item.id !== action.id); //all item.id that are not equal to action.id are kept.
+    } else {
+      const updatedItem = { ...existingItem, amount: existingItem.amount - 1 }; //spread existing item and change the amount value minus 1
+      updatedItems = [...state.items];
+      updatedItems[existingCartItemIndex] = updatedItem;
+    }
+    return { //return our new array
+      items: updatedItems,
+      totalAmount: updatedTotalAmount,
+    };
+  }
   //return default if above does not meet
-  return defaultCartState
+  return defaultCartState;
 };
 
 const CartProvider = (props) => {
