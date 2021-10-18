@@ -8,6 +8,7 @@ const Cart = (props) => {
 
   const cartCtx = useContext(CartContext);
   const totalAmount = `£${cartCtx.totalAmount.toFixed(2)}` //template literal
+  const hasItems = cartCtx.items.length > 0;
   //helper const
   const cartItems = (
     <ul className={classes["cart-items"]}>
@@ -35,7 +36,7 @@ const Cart = (props) => {
       </div>
       <div className={classes.actions}>
         <button className={classes['button--alt']} onClick={props.onHideCart}>Close</button>
-        <button className={classes.button}>Order</button>
+        {hasItems && <button className={classes.button}>Order</button>}
       </div>
     </Modal>
   );
