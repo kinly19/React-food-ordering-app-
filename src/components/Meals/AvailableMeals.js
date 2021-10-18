@@ -32,7 +32,6 @@ const DUMMY_MEALS = [
 const AvailableMeals = () => {
 
   const mealsList = DUMMY_MEALS.map((meal) => ( //const helper to map through our dummy list, we can do it here instead of inside the actually jsx snippet
-    <li>
       <MealItem //return a custom component for each item in our Dummy_meals list.
         id={meal.id}
         key={meal.id}
@@ -40,7 +39,6 @@ const AvailableMeals = () => {
         description={meal.description}
         price={meal.price}
       />
-    </li>
   )); 
 
   return (
