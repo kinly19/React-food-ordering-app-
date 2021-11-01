@@ -1,37 +1,45 @@
 import classes from './AvailableMeals.module.css';
 import Card from '../UI/Card';
 import MealItem from './MealItem/MealItem';
+import { useEffect, useState } from 'react';
 
-const DUMMY_MEALS = [
-  {
-    id: 'm1',
-    name: 'Sushi',
-    description: 'Finest fish and veggies',
-    price: 22.99,
-  },
-  {
-    id: 'm2',
-    name: 'Schnitzel',
-    description: 'A german specialty!',
-    price: 16.5,
-  },
-  {
-    id: 'm3',
-    name: 'Barbecue Burger',
-    description: 'American, raw, meaty',
-    price: 12.99,
-  },
-  {
-    id: 'm4',
-    name: 'Green Bowl',
-    description: 'Healthy...and green...',
-    price: 18.99,
-  },
-];
+//================================================ Notes ================================================
+// Data which comes in from our api request is an object, because we want an array we will transform this
+// we push an object with its key pair values inside of an array (array object)
+// m1
+// description:  "Finest fish and veggies"
+// name: "Sushi"
+// price: 22.99
+// responseData[key].name - we access the nested object in here
+// no dependencies are needed for useEffect, because we only want the fetch to happen once after first render
+//=======================================================================================================
 
 const AvailableMeals = () => {
 
-  const mealsList = DUMMY_MEALS.map((meal) => ( //const helper to map through our dummy list, we can do it here instead of inside the actually jsx snippet
+  const [meals, setMeals] = useState([]);
+
+  useEffect(() => {
+    const fetchMeals = async () => {
+      const response = await fetch(
+        "https://foodorderingapp-fa5c8-default-rtdb.europe-west1.firebasedatabase.app/meals.json"
+      );
+      const responseData = await response.json();
+
+      const loadedMeals = [];
+      for (const key in responseData) {
+        loadedMeals.push({
+          id: key,
+          name: responseData[key].name,
+          description: responseData[key].description,
+          price: responseData[key].price,
+        });
+      };
+      setMeals(loadedMeals);
+    };
+    fetchMeals();
+  }, []);
+
+  const mealsList = meals.map((meal) => ( //const helper to map through our dummy list, we can do it here instead of inside the actually jsx snippet
       <MealItem //return a custom component for each item in our Dummy_meals list.
         id={meal.id}
         key={meal.id}
