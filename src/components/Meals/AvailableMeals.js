@@ -19,12 +19,18 @@ const AvailableMeals = () => {
 
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState();
 
   useEffect(() => {
     const fetchMeals = async () => {
       const response = await fetch(
         "https://foodorderingapp-fa5c8-default-rtdb.europe-west1.firebasedatabase.app/meals.json"
       );
+
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+
       const responseData = await response.json();
 
       const loadedMeals = [];
@@ -35,11 +41,16 @@ const AvailableMeals = () => {
           description: responseData[key].description,
           price: responseData[key].price,
         });
-      };
+      }
+
       setMeals(loadedMeals);
       setIsLoading(false);
     };
-    fetchMeals();
+
+    fetchMeals().catch((error) => {
+      setIsLoading(false);
+      setFetchError(error.message);
+    });  
   }, []);
 
   //return a loading message if inLoading is true
@@ -51,7 +62,16 @@ const AvailableMeals = () => {
     );
   };
 
-  //if isLoading is false then we map and return mealsList 
+  //return error message
+  if (fetchError) {
+    return (
+      <section className={classes.MealsError}>
+        <p>{fetchError}</p>
+      </section>
+    );
+  };
+
+  //if isLoading and fetcheError is false then we map and return mealsList 
   const mealsList = meals.map((meal) => ( //const helper to map through our meals list, we can do it here instead of inside the actually jsx snippet
       <MealItem //return a custom component for each item in our meals list.
         id={meal.id}
