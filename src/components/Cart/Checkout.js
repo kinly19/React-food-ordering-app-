@@ -24,6 +24,7 @@ const Checkout = (props) => {
   const postalCodeInput = useRef();
   const cityInput = useRef();
 
+  //handler
   const confirmHandler = (event) => {
     event.preventDefault();
 
@@ -44,6 +45,7 @@ const Checkout = (props) => {
       postCode: enteredpostalCodeIsValid
     });
 
+    //form validity
     const formIsValid =
       enteredNameIsValid &&
       enteredStreetIsValid &&
@@ -53,7 +55,13 @@ const Checkout = (props) => {
     if(!formIsValid) {
      return;
     }
-      
+    //pass checkout data back up to cart component
+    props.onConfirm({
+      name: enteredName,
+      street: enteredStreet,
+      city: enteredStreet,
+      postalCode: enteredPostalCode
+    });  
   };
 
   //classes
